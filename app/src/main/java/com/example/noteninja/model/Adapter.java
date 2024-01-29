@@ -1,5 +1,7 @@
 package com.example.noteninja.model;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.noteninja.NoteDetails;
 import com.example.noteninja.R;
 
 import java.util.ArrayList;
@@ -33,16 +36,20 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") final int position) {
         holder.noteTitle.setText(titles.get(position));
         holder.noteContent.setText(content.get(position));
-        holder.mCardView.setCardBackgroundColor(holder.view.getResources().getColor(getRandomColor(),null));
+        final int code = getRandomColor();
+        holder.mCardView.setCardBackgroundColor(holder.view.getResources().getColor(code,null));
 
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(), "The Item is Clicked", Toast.LENGTH_SHORT).show();
-
+                Intent i = new Intent(v.getContext(), NoteDetails.class);
+                i.putExtra("title",titles.get(position));
+                i.putExtra("content",content.get(position));
+                i.putExtra("code",code);
+                v.getContext().startActivity(i);
             }
         });
     }
@@ -151,7 +158,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
             colorCode.add(R.color.Blue);
             colorCode.add(R.color.DarkBlue);
             colorCode.add(R.color.Navy);
-            colorCode.add(R.color.Black);
+            //colorCode.add(R.color.Black);
         } // Colors used
 
         Random randomColor= new Random();

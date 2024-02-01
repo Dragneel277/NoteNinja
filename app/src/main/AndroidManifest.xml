@@ -13,6 +13,9 @@
         android:theme="@style/Theme.NoteNinja"
         tools:targetApi="33">
         <activity
+            android:name=".EditNote"
+            android:exported="false" />
+        <activity
             android:name=".AddNote"
             android:exported="false"
             android:label="@string/title_activity_add_note"

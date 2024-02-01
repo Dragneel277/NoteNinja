@@ -2,18 +2,18 @@ package com.example.noteninja;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import android.text.method.ScrollingMovementMethod;
+import android.view.MenuItem;
+import android.widget.TextView;
 
 import androidx.activity.OnBackPressedDispatcher;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.text.method.ScrollingMovementMethod;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.Objects;
 
 
 public class NoteDetails extends AppCompatActivity {
@@ -25,7 +25,7 @@ public class NoteDetails extends AppCompatActivity {
         setContentView(R.layout.activity_note_details);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         data = getIntent();
 
@@ -40,17 +40,14 @@ public class NoteDetails extends AppCompatActivity {
 
 
         FloatingActionButton fab = findViewById(R.id.fab);
-        /*fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-           public void onClick(View view) {
+        fab.setOnClickListener(view -> {
 
-                Intent i = new Intent(view.getContext(),EditNote.class);
-                i.putExtra("title",data.getStringExtra("title"));
-                i.putExtra("content",data.getStringExtra("content"));
-                i.putExtra("noteId",data.getStringExtra("noteId"));
-                startActivity(i);
-            }
-        });*/
+            Intent i = new Intent(view.getContext(),EditNote.class);
+            i.putExtra("title",data.getStringExtra("title"));
+            i.putExtra("content",data.getStringExtra("content"));
+            i.putExtra("noteId",data.getStringExtra("noteId"));
+            startActivity(i);
+        });
     }
 
 

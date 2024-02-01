@@ -3,18 +3,21 @@ package com.example.noteninja;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -26,12 +29,15 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     DrawerLayout drawerLayout;
@@ -40,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     RecyclerView noteLists;
 
     FirebaseFirestore fStore;
+    FirebaseUser user;
 
     FirestoreRecyclerAdapter<Note,NoteViewHolder> noteAdapter;
 
@@ -61,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         noteAdapter = new FirestoreRecyclerAdapter<Note, NoteViewHolder>(allNotes) {
             @Override
-            protected void onBindViewHolder(@NonNull NoteViewHolder noteViewHolder, final int i, @NonNull final Note note) {
+            protected void onBindViewHolder(@NonNull NoteViewHolder noteViewHolder, @SuppressLint("RecyclerView") final int i, @NonNull final Note note) {
                 noteViewHolder.noteTitle.setText(note.getTitle());
                 noteViewHolder.noteContent.setText(note.getContent());
                 final int code = getRandomColor();
@@ -76,6 +83,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     i1.putExtra("noteId",docId);
                     v.getContext().startActivity(i1);
                 });
+
+                ImageView menuIcon = noteViewHolder.view.findViewById(R.id.menuIcon);
+                menuIcon.setOnClickListener(v -> {
+                    final String docId1 = noteAdapter.getSnapshots().getSnapshot(i).getId();
+                    PopupMenu menu = new PopupMenu(v.getContext(),v);
+                    menu.setGravity(Gravity.END);
+                    menu.getMenu().add("Edit").setOnMenuItemClickListener(item -> {
+                        Intent i12 = new Intent(v.getContext(), EditNote.class);
+                        i12.putExtra("title",note.getTitle());
+                        i12.putExtra("content",note.getContent());
+                        i12.putExtra("noteId", docId1);
+                        startActivity(i12);
+                        return false;
+                    });
+
+                    menu.getMenu().add("Delete").setOnMenuItemClickListener(item -> {
+                        fStore.collection("notes").document(user.getUid()).collection("myNotes").document(docId1)
+                                .delete()
+                                .addOnSuccessListener(aVoid -> Toast.makeText(MainActivity.this, "Note Deleted", Toast.LENGTH_SHORT).show()).addOnFailureListener(e -> Toast.makeText(MainActivity.this, "Error in Deleting Note.", Toast.LENGTH_SHORT).show());
+                        return false;
+                    });
+
+                    menu.show();
+
+                });
+
+
+
             }
 
             @NonNull
@@ -155,6 +190,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    // Random colors to notes
     private int getRandomColor() {
         List<Integer> colorCode = new ArrayList<>();
         {

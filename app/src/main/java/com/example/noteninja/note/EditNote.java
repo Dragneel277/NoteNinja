@@ -69,7 +69,7 @@ public class EditNote extends AppCompatActivity {
             note.put("title",nTitle);
             note.put("content",nContent);
 
-            fStore.collection("notes").document(user.getUid()).collection("myNotes").document(Objects.requireNonNull(data.getStringExtra("noteId")))
+            fStore.collection("notes").document(Objects.requireNonNull(data.getStringExtra("noteId")))
                     .update(note).addOnSuccessListener(aVoid -> {
                         Toast.makeText(EditNote.this, "Note Saved.", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(getApplicationContext(), MainActivity.class));

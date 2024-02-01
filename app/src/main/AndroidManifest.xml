@@ -12,16 +12,29 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NoteNinja"
         tools:targetApi="33">
+        <activity android:name=".Splash" android:theme="@style/AppTheme.NoActionBar"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
-            android:name=".EditNote"
+            android:name=".auth.Login"
             android:exported="false" />
         <activity
-            android:name=".AddNote"
+            android:name=".auth.Register"
+            android:exported="false" />
+        <activity
+            android:name=".note.EditNote"
+            android:exported="false" />
+        <activity
+            android:name=".note.AddNote"
             android:exported="false"
             android:label="@string/title_activity_add_note"
             android:theme="@style/Theme.NoteNinja" />
         <activity
-            android:name=".NoteDetails"
+            android:name=".note.NoteDetails"
             android:exported="false"
             android:label="@string/title_activity_note_details"
             android:theme="@style/Theme.NoteNinja" />
@@ -30,11 +43,6 @@
             android:exported="true"
             android:label="NoteNinja"
             android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 

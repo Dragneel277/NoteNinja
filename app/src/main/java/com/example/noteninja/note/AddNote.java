@@ -1,4 +1,4 @@
-package com.example.noteninja;
+package com.example.noteninja.note;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.example.noteninja.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;

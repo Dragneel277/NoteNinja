@@ -1,4 +1,4 @@
-package com.example.noteninja;
+package com.example.noteninja.note;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.example.noteninja.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.Objects;

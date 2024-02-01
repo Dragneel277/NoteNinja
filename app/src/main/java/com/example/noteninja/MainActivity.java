@@ -25,12 +25,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.example.noteninja.model.Note;
+import com.example.noteninja.note.AddNote;
+import com.example.noteninja.note.EditNote;
+import com.example.noteninja.note.NoteDetails;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
@@ -98,12 +102,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         return false;
                     });
 
-                    menu.getMenu().add("Delete").setOnMenuItemClickListener(item -> {
-                        fStore.collection("notes").document(user.getUid()).collection("myNotes").document(docId1)
-                                .delete()
-                                .addOnSuccessListener(aVoid -> Toast.makeText(MainActivity.this, "Note Deleted", Toast.LENGTH_SHORT).show()).addOnFailureListener(e -> Toast.makeText(MainActivity.this, "Error in Deleting Note.", Toast.LENGTH_SHORT).show());
-                        return false;
+                    menu.getMenu().add("Delete").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(@NonNull MenuItem item) {
+                            fStore.collection("notes").document(user.getUid()).collection("myNotes").document(docId)
+                                    .delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Toast.makeText(MainActivity.this, "Note Deleted", Toast.LENGTH_SHORT).show();
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(MainActivity.this, "Error in Deleting Note.", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            return false;
+                        }
                     });
+
 
                     menu.show();
 

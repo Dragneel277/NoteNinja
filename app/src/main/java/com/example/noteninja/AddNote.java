@@ -1,7 +1,6 @@
 package com.example.noteninja;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -15,17 +14,15 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
 
+/** @noinspection DataFlowIssue*/
 public class AddNote extends AppCompatActivity {
     FirebaseFirestore fStore;
     EditText noteTitle,noteContent;
@@ -70,19 +67,13 @@ public class AddNote extends AppCompatActivity {
             note.put("content",nContent);
 
 
-            fStore.collection("notes").add(note).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                        @Override
-                        public void onSuccess(DocumentReference documentReference) {
-                            Toast.makeText(AddNote.this, "Note Added.", Toast.LENGTH_SHORT).show();
-                            onBackPressedDispatcher.onBackPressed();
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(AddNote.this, "Error, Try again.", Toast.LENGTH_SHORT).show();
-                            progressBarSave.setVisibility(View.VISIBLE);
-                        }
+            fStore.collection("notes").add(note).addOnSuccessListener(documentReference -> {
+                Toast.makeText(AddNote.this, "Note Added.", Toast.LENGTH_SHORT).show();
+                onBackPressedDispatcher.onBackPressed();
+            })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(AddNote.this, "Error, Try again.", Toast.LENGTH_SHORT).show();
+                        progressBarSave.setVisibility(View.VISIBLE);
                     });
 
         });

@@ -6,9 +6,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
-
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -22,7 +20,6 @@ import com.example.noteninja.model.Adapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.FirebaseFirestore;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         drawerLayout = findViewById(R.id.drawer);
         nav_view = findViewById(R.id.nav_view);
-        nav_view.setNavigationItemSelectedListener((NavigationView.OnNavigationItemSelectedListener) this);
+        nav_view.setNavigationItemSelectedListener(this);
 
 
         toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);
@@ -80,13 +77,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         noteLists.setAdapter(adapter);
 
         FloatingActionButton fab = findViewById(R.id.addNoteFloat);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(view.getContext(), AddNote.class));
-                overridePendingTransition(R.anim.slide_up,R.anim.slide_down);
-                finish();
-            }
+        fab.setOnClickListener(view -> {
+            startActivity(new Intent(view.getContext(), AddNote.class));
+            overridePendingTransition(R.anim.slide_up,R.anim.slide_down);
+            finish();
         });
 
     }
